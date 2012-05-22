@@ -26,8 +26,8 @@ Automata exposes an object with two functions:
 
 ```javascript
 module.exports= {
- registerFSM
- createSession
+  registerFSM
+  createSession
 }
 ```
 
@@ -282,7 +282,9 @@ Automata offers out of the box timed transitions by defining an **onTimer** bloc
              initial : true,
              onTimer : {
                  timeout : 2000,
-                 event   : "12"
+                 event   : {
+                     msgId : "12"
+                 }
              },
         }
     ],
@@ -352,7 +354,7 @@ transition for the dispatched event.
 For example, given the previous example,
 
 ```javascript
-session.dispatch( {msgId : "T_S1_S2" } );
+session.dispatch( { msgId : "T_S1_S2" } );
 ```
 
 means the session is on state SS1, and the stackTrace will be the following:
@@ -361,7 +363,7 @@ ROOT, SUB_STATE, SS1
 
 By calling
 ```javascript
-session.dispatch( {msgId : "T_SS_S3" } );
+session.dispatch( { msgId : "T_SS_S3" } );
 ```
 
 on the session at state SS1, SS1 will be removed from the stack (since SS2 is a final state), and the session will
@@ -397,11 +399,11 @@ session.addListener( {
 
 The obj parameter for each listener object function contains the following parameters:
 
-* **contextCreated**:     function( session, context )
-* **contextDestroyed**:   function( session, context )
-* **finalStateReached**:  function( session )
-* **stateChanged**:       function( session, context, newState, message )
-* **customEvent**:        function( session, message )
+* **contextCreated**:     ```function( { session, context } )```
+* **contextDestroyed**:   ```function( { session, context } )```
+* **finalStateReached**:  ```function( { session } )```
+* **stateChanged**:       ```function( { session, context, state, message } )```
+* **customEvent**:        ```function( { session, message } )```
 
 In all cases:
 
@@ -421,7 +423,7 @@ and have a listener/observer object attached to the sending FSM session.
 This method will be notified on the method
 
 ```javascript
-customEvent         : function( { session: session, customEvent: a_json_object } ) {
+customEvent         : function( { session: session, message: a_json_object } ) {
 ```
 
 
